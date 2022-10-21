@@ -1,0 +1,15 @@
+<h1>Welcome to Build Your PC!</h1>
+
+<form action="{% url 'builder:index' %}" method="post">
+  {% csrf_token %}
+  <h3>To start, select a CPU brand:</h3>
+  <input name="brand" type="radio" value="AMD"/>
+  <label>AMD</label><br>
+  <input name="brand" type="radio" value="Intel"/>
+  <label>Intel</label><br>
+  
+  <br>
+  
+  <button name="submit">NEXT</button>
+  <input type="hidden" name="next" value="{% url 'builder:cpu' order %}"/>
+</form>
