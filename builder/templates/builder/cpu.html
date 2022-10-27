@@ -4,7 +4,7 @@
     <legend><h1>Choose a CPU:</h1></legend>
     {% for cpu in components %}
       <input type="radio" name="cpu" id="cpu{{ forloop.counter }}" 
-        value="{{ cpu.id }}"/>
+        value="{{ cpu.id }}" onclick=""/>
       <label for="cpu{{ forloop.counter }}">{{ cpu.model }}</label><br><br>
       {{ cpu.description|linebreaks }}<br><br>
       {{ cpu.price }}<br><br><br><br>

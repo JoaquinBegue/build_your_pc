@@ -54,7 +54,7 @@ def motherboard(request, order_id):
 
 
 def gpu(request, order_id):
-    """The user chooses the motherboard."""
+    """The user chooses the GPU."""
 
     # Get the order object and the available components (compatible ones)
     order = Order.objects.get(id=order_id)
@@ -64,10 +64,28 @@ def gpu(request, order_id):
     if request.method == 'POST':
         order.gpu = request.POST.get('gpu', None)
         order.save()
-        return HttpResponseRedirect(reverse('builder:order_review',
+        return HttpResponseRedirect(reverse('builder:ram',
             args=(order_id,)))
     
     return render(request, 'builder/gpu.html', context)
+
+
+def ram(request, order_id):
+    """The user chooses the ram."""
+
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
+    available_comps = Component.objects.filter(c_type='RAM')
+    context = {'components': available_comps, 'order_id': order_id}
+
+    if request.method == 'POST':
+        order.ram = request.POST.get('ram', None)
+        order.save()
+        return HttpResponseRedirect(reverse('builder:order_review',
+            args=(order_id,)))
+    
+    return render(request, 'builder/ram.html', context)
+
 
 def order_review(request, order_id):
     order = Order.objects.get(id=order_id)

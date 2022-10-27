@@ -1,13 +1,13 @@
-<form action="{% url 'builder:cpu' order_id %}" method="post">
+<form action="{% url 'builder:gpu' order_id %}" method="post">
   {% csrf_token %}
   <fieldset>
-    <legend><h1>Choose a CPU:</h1></legend>
-    {% for cpu in components %}
-      <input type="radio" name="cpu" id="cpu{{ forloop.counter }}" 
-        value="{{ cpu.id }}"/>
-      <label for="cpu{{ forloop.counter }}">{{ cpu.model }}</label><br><br>
-      {{ cpu.description|linebreaks }}<br><br>
-      {{ cpu.price }}<br><br><br><br>
+    <legend><h1>Choose a GPU:</h1></legend>
+    {% for gpu in components %}
+      <input type="radio" name="gpu" id="gpu{{ forloop.counter }}" 
+        value="{{ gpu.id }}"/>
+      <label for="gpu{{ forloop.counter }}">{{ gpu.model }}</label><br><br>
+      {{ gpu.description|linebreaks }}<br><br>
+      ${{ gpu.price }}<br><br><br><br>
     {% empty %}
       <p>Ups! There are no components available for the moment, sorry!</p>
     {% endfor %}
