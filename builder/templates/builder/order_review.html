@@ -1,0 +1,7 @@
+<h1>Here is your order at the moment:</h1>
+
+{% for comp_type, comp in components.items %}
+  {% if comp %}
+    <p>{{ comp_type }}: {{ comp }}</p>
+  {% endif %}
+{% endfor %}

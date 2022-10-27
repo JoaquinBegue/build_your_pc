@@ -2,65 +2,83 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Component
+from .models import Component, Order
 
 
 def index(request):
     """The starting page. The user chooses the cpu's brand."""
-    order = url_str() # An order with the components the user chooses.
-    context = {'order': order}
-    try:
-        brand = request.POST['brand']
-    except KeyError:
-        return render(request, 'builder/index.html', context)
-    else:
-        order = url_str(order, f"brand:{brand}-")
+
+    if request.method == 'POST':
+        order = Order(cpu_brand=request.POST['brand'])
+        order.save()
         return HttpResponseRedirect(reverse('builder:cpu',
-            args=(order,)))
+            args=(order.id,)))
 
+    return render(request, 'builder/index.html')
+        
 
-def cpu(request, order):
+def cpu(request, order_id):
     """The user chooses the CPU."""
-    splitted_order = split_order(order)
-    order = [tuple(order.split(":"))]
+
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
     available_comps = Component.objects.filter(c_type='CPU').filter(
-        model__icontains=order[0][1])
-    order = order_raw
-    context = {'components': available_comps, 'order': order}
+        socket=order.cpu_brand)
+    context = {'components': available_comps, 'order_id': order_id}
 
-    try:
-        chosen_cpu = available_comps.get(pk=request.POST['cpu'])
-        chosen_cpu = request.POST['cpu']
-    except  (KeyError, Component.DoesNotExist):
-        return render(request, 'builder/cpu.html', context)
-    else:
-        order += "-cpu:" + chosen_cpu
+    if request.method == 'POST':
+        order.cpu = request.POST.get('cpu', None)
+        order.save()
         return HttpResponseRedirect(reverse('builder:motherboard',
-            args=(order,)))
-   
+            args=(order_id,)))
+    
+    return render(request, 'builder/cpu.html', context)
 
-def motherboard(request, order):
-    order_raw = order
-    order_split = order.split("-")
-    order = []
-    for o in order_split:
-        order.append(tuple(o.split(":")))
-    context = {'order': order}
+
+def motherboard(request, order_id):
+    """The user chooses the motherboard."""
+
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
+    available_comps = Component.objects.filter(c_type='MB').filter(
+        socket=order.cpu_brand)
+    context = {'components': available_comps, 'order_id': order_id}
+
+    if request.method == 'POST':
+        order.mb = request.POST.get('mb', None)
+        order.save()
+        return HttpResponseRedirect(reverse('builder:gpu',
+            args=(order_id,)))
+    
     return render(request, 'builder/motherboard.html', context)
 
 
-def url_str(order=None, string=None):
-    if order and string:
-        order += string
-        return order
-    else:
-        return 'order'
+def gpu(request, order_id):
+    """The user chooses the motherboard."""
 
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
+    available_comps = Component.objects.filter(c_type='GPU')
+    context = {'components': available_comps, 'order_id': order_id}
 
-def split_order(order):
-    fields = order.split("-")
-    splitted_order = []
-    for field in fields:
-        splitted_order.append(tuple(field.split(":")))
-    return splitted_order
+    if request.method == 'POST':
+        order.gpu = request.POST.get('gpu', None)
+        order.save()
+        return HttpResponseRedirect(reverse('builder:order_review',
+            args=(order_id,)))
     
+    return render(request, 'builder/gpu.html', context)
+
+def order_review(request, order_id):
+    order = Order.objects.get(id=order_id)
+    components = {'Motherboard': order.mb, 'CPU': order.cpu,
+        'GPU': order.gpu, 'RAM': order.ram, 'Ref. System': order.rf,
+        'Case': order.cs, 'Power Supply': order.ps}
+
+    for k, comp in components.items():
+        if comp:
+            components[k] = Component.objects.get(id=comp)
+
+    print(components)
+    context = {'order': order, 'components': components}
+    return render(request, 'builder/order_review.html', context)

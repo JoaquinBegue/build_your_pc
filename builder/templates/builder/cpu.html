@@ -1,4 +1,4 @@
-<form action="{% url 'builder:cpu' order %}" method="post">
+<form action="{% url 'builder:cpu' order_id %}" method="post">
   {% csrf_token %}
   <fieldset>
     <legend><h1>Choose a CPU:</h1></legend>

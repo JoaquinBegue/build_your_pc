@@ -8,7 +8,11 @@ urlpatterns = [
     # Index page / Brand choosing page.
     path('', views.index, name='index'),
     # CPU choosing page.
-    path('cpu/<order>', views.cpu, name='cpu'),
+    path('cpu/<order_id>', views.cpu, name='cpu'),
     # Motherboard choosing page.
-    path('motherboard/<order>/', views.motherboard, name='motherboard'),
+    path('motherboard/<order_id>/', views.motherboard, name='motherboard'),
+    # GPU choosing page.
+    path('gpu/<order_id>/', views.gpu, name='gpu'),
+    # Order review page.
+    path('order_review/<order_id>/', views.order_review, name='order_review'),
 ]

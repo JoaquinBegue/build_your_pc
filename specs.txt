@@ -1,0 +1,36 @@
+scheme:
+
+    pages:
+        The website will start with an index, that lets the user choose a brand
+        for the CPU.
+        Next, it will have a set of pages for each component the user can choose.
+        Each of this pages will display the available components that are stored
+        in the database.
+
+    models:
+        - Component:
+            Represents a PC component, with the following fields:
+                - 'comp_type',
+                - 'model',
+                - 'description',
+                - 'price'
+
+        - Order:
+            Represent an user order of components. It will have a field for
+            each component type, that will store an id of the component that
+            the user chosen.
+            The id of an order is the value that will be passed through the 
+            templates and views.
+
+    advanced goals:
+        Later in the project, a compatibility system will be added, to offer
+        the user the components that are compatible with each other.
+
+        The user should be able to edit an order. When an order is finished,
+        it will be stored and a message will be display asking the user to create
+        an account. After that, a simulation bill page will be displayed.
+
+to do:
+    - create a refined component's model system, where there is a parent class
+    Components, and each type of component is a child class of it.
+    This will help to manage the compatibility of the components.
