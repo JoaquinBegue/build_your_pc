@@ -15,6 +15,9 @@ urlpatterns = [
     path('gpu/<order_id>/', views.gpu, name='gpu'),
     # RAM choosing page.
     path('ram/<order_id>/', views.ram, name='ram'),
+    
     # Order review page.
     path('order_review/<order_id>/', views.order_review, name='order_review'),
+    # Check page.
+    path('check/<arg>/', views.check, name='check')
 ]

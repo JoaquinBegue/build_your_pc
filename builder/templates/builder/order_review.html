@@ -2,6 +2,15 @@
 
 {% for comp_type, comp in components.items %}
   {% if comp %}
-    <p>{{ comp_type }}: {{ comp }}</p>
+    {% if comp_type != "RAM" %}
+      <p>{{ comp_type }}: {{ comp }}</p>
+    {% else %}
+      <p>{{ comp_type }}:</p>
+      <ul>
+        {% for amount, ram in comp.items %}
+          <li>{{ amount }}x {{ ram }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   {% endif %}
 {% endfor %}

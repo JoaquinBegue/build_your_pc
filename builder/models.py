@@ -1,29 +1,53 @@
 from django.db import models
 
 class Component(models.Model):
-    COMP_TYPES = [
-        ('MB', 'Motherboard'),
-        ('CPU', 'CPU'),
-        ('GPU', 'GPU'),
-        ('RAM', 'RAM'),
-        ('RF', 'Ref. System'),
-        ('CS', 'Case'),
-        ('PS', 'Power Supply')
-    ]
+    model = models.CharField(max_length=50)
+    description = models.CharField(max_length=5000)
+    price = models.FloatField()
+    consumption = models.IntegerField()
+    
+    def __str__(self):
+        return self.model
 
+
+class Motherboard(Component):
     SOCKETS = [
+        ('None', 'None'),
         ('AMD', 'AMD'),
         ('Intel', 'Intel')
     ]
 
-    c_type = models.CharField(max_length=3 , choices=COMP_TYPES)
-    model = models.CharField(max_length=50)
-    description = models.CharField(max_length=5000)
-    price = models.FloatField()
+    socket = models.CharField(max_length=5, choices=SOCKETS)
+    ram_slots = models.IntegerField(default=0)
+
+
+class CPU(Component):
+    SOCKETS = [
+        ('None', 'None'),
+        ('AMD', 'AMD'),
+        ('Intel', 'Intel')
+    ]
+
     socket = models.CharField(max_length=5, choices=SOCKETS)
 
-    def __str__(self):
-        return self.model
+
+class GPU(Component):
+    vram = models.IntegerField()
+
+class RAM(Component):
+    capacity = models.IntegerField()
+
+
+class RefSystem(Component):
+    number_fans = models.IntegerField()
+
+
+class Case(Component):
+    fan_slots = models.IntegerField()
+
+
+class PowerSupply(Component):
+    potency = models.IntegerField()
 
 
 class Order(models.Model):
@@ -31,7 +55,7 @@ class Order(models.Model):
     mb = models.IntegerField(null=True) # motherboard
     cpu = models.IntegerField(null=True)
     gpu = models.IntegerField(null=True)
-    ram = models.IntegerField(null=True)
+    ram = models.CharField(max_length=100, null=True)
     rf = models.IntegerField(null=True) # ref. system
     cs = models.IntegerField(null=True) # case
     ps = models.IntegerField(null=True) # power supply
