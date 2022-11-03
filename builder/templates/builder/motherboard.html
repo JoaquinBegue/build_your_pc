@@ -1,16 +1,5 @@
 <form action="{% url 'builder:motherboard' order_id %}" method="post">
   {% csrf_token %}
-  <fieldset>
-    <legend><h1>Choose a motherboard:</h1></legend>
-    {% for mb in components %}
-      <input type="radio" name="mb" id="mb{{ forloop.counter }}" 
-        value="{{ mb.id }}"/>
-      <label for="mb{{ forloop.counter }}">{{ mb.model }}</label><br><br>
-      {{ mb.description|linebreaks }}<br><br>
-      {{ mb.price }}<br><br><br><br>
-    {% empty %}
-      <p>Ups! There are no components available for the moment, sorry!</p>
-    {% endfor %}
-  </fieldset>
-  <input type="submit" value="Next">
+  {{ form }}
+  <button name="submit">NEXT</button>
 </form>

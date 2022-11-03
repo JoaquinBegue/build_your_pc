@@ -18,6 +18,4 @@ urlpatterns = [
     
     # Order review page.
     path('order_review/<order_id>/', views.order_review, name='order_review'),
-    # Check page.
-    path('check/<arg>/', views.check, name='check')
 ]

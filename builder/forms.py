@@ -1,20 +1,13 @@
-from random import choices
 from django import forms
 
-from .models import *
 
-class BrandForm(forms.Form):
-    CHOICES = [('amd', 'AMD'), ('intel', 'Intel')]
-    brand = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, 
-        label="To start, select a brand for your CPU:")
+class ComponentForm(forms.Form):
+    def __init__(self, choices, label, *args, **kwargs):
+        self.base_fields['comp'].choices = choices
+        self.base_fields['comp'].label = label
+        super(ComponentForm, self).__init__(*args, **kwargs)
 
-
-class CpuForm(forms.Form):
-    def __init__(self, cpu_choices, *args, **kwargs):
-        super(CpuForm, self).__init__(*args, **kwargs)
-        self.fields['cpu'].choices = cpu_choices
-
-    cpu = forms.ChoiceField(widget=forms.RadioSelect, choices=(), required=True)
+    comp = forms.ChoiceField(widget=forms.RadioSelect, choices=(), required=True)
     
     
     

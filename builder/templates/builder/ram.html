@@ -1,19 +1,5 @@
 <form action="{% url 'builder:ram' order_id %}" method="post">
   {% csrf_token %}
-  <fieldset>
-    <legend><h1>Choose the RAM:</h1></legend>
-    <h3>The selected motherboard supports {{ max_ram_slots }} ram sticks max!</h3>
-    <br>
-    {% for ram in components %}
-      <input type="number" name="{{ ram.id }}" id="ram{{ forloop.counter }}" 
-        min="0" max="{{ max_ram_slots }}" value="0"/>
-      <label for="ram{{ forloop.counter }}">{{ ram.model }}</label>
-      <br><br>
-      {{ ram.description|linebreaks }}<br><br>
-      ${{ ram.price }}<br><br><br><br>
-    {% empty %}
-      <p>Ups! There are no components available for the moment, sorry!</p>
-    {% endfor %}
-  </fieldset>
-  <input type="submit" value="Next">
+  {{ form }}
+  <button name="submit">NEXT</button>
 </form>

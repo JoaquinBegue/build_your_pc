@@ -1,16 +1,5 @@
 <form action="{% url 'builder:gpu' order_id %}" method="post">
   {% csrf_token %}
-  <fieldset>
-    <legend><h1>Choose a GPU:</h1></legend>
-    {% for gpu in components %}
-      <input type="radio" name="gpu" id="gpu{{ forloop.counter }}" 
-        value="{{ gpu.id }}"/>
-      <label for="gpu{{ forloop.counter }}">{{ gpu.model }}</label><br><br>
-      {{ gpu.description|linebreaks }}<br><br>
-      ${{ gpu.price }}<br><br><br><br>
-    {% empty %}
-      <p>Ups! There are no components available for the moment, sorry!</p>
-    {% endfor %}
-  </fieldset>
-  <input type="submit" value="Next">
+  {{ form }}
+  <button name="submit">NEXT</button>
 </form>
