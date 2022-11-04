@@ -1,7 +1,15 @@
-<h1>Here is your order at the moment:</h1>
+{% extends 'builder/base.html' %}
 
-{% for comp_type, comp in components.items %}
-  {% if comp %}
-    <p>{{ comp_type }}: {{ comp }}</p>
-  {% endif %}
-{% endfor %}
+{% block content %}
+  <h1>Here is your order at the moment:</h1>
+
+  {% for comp_type, comp in components.items %}
+    {% if comp %}
+      <li>{{ comp_type }}:</li>
+      <ul><p>{{ comp }}</p></ul>
+      <br>
+    {% endif %}
+  {% endfor %}
+
+  <button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>
+{% endblock content %}

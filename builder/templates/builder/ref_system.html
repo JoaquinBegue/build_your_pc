@@ -1,7 +1,7 @@
 {% extends 'builder/base.html' %}
 
 {% block content %}
-  <form action="{% url 'builder:cpu' order_id %}" method="post">
+  <form action="{% url 'builder:ref_system' order_id %}" method="post">
     {% csrf_token %}
     {{ form }}
     <button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>

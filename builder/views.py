@@ -116,11 +116,85 @@ def ram(request, order_id):
         if form.is_valid():
             order.ram = form.cleaned_data['comp']
             order.save()
-            return HttpResponseRedirect(reverse('builder:order_review',
+            return HttpResponseRedirect(reverse('builder:case',
                 args=(order_id,)))
     
     context = {'form': form, 'order_id': order_id}
     return render(request, 'builder/ram.html', context)
+
+
+def case(request, order_id):
+    """The user chooses the case."""
+
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
+    available_comps = Case.objects.all()
+
+    choices = get_choices(available_comps)
+    label = "Select the Case:"
+
+    if request.method != 'POST':
+        form = ComponentForm(choices, label)
+    else:
+        form = ComponentForm(choices, label, request.POST)
+        if form.is_valid():
+            order.cs = form.cleaned_data['comp']
+            order.save()
+            return HttpResponseRedirect(reverse('builder:ref_system',
+                args=(order_id,)))
+    
+    context = {'form': form, 'order_id': order_id}
+    return render(request, 'builder/case.html', context)
+
+
+def ref_system(request, order_id):
+    """The user chooses the ref system."""
+
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
+    available_comps = RefSystem.objects.all()
+
+    choices = get_choices(available_comps)
+    label = "Select the Refrigeration System:"
+
+    if request.method != 'POST':
+        form = ComponentForm(choices, label)
+    else:
+        form = ComponentForm(choices, label, request.POST)
+        if form.is_valid():
+            order.rf = form.cleaned_data['comp']
+            order.save()
+            return HttpResponseRedirect(reverse('builder:power_supply',
+                args=(order_id,)))
+    
+    context = {'form': form, 'order_id': order_id}
+    return render(request, 'builder/ref_system.html', context)
+
+
+
+
+def power_supply(request, order_id):
+    """The user chooses the power supply."""
+
+    # Get the order object and the available components (compatible ones)
+    order = Order.objects.get(id=order_id)
+    available_comps = PowerSupply.objects.all()
+
+    choices = get_choices(available_comps)
+    label = "Select the Power Supply:"
+
+    if request.method != 'POST':
+        form = ComponentForm(choices, label)
+    else:
+        form = ComponentForm(choices, label, request.POST)
+        if form.is_valid():
+            order.ps = form.cleaned_data['comp']
+            order.save()
+            return HttpResponseRedirect(reverse('builder:order_review',
+                args=(order_id,)))
+    
+    context = {'form': form, 'order_id': order_id}
+    return render(request, 'builder/power_supply.html', context)
 
 
 def order_review(request, order_id):
@@ -146,3 +220,45 @@ def get_choices(components):
     for comp in components:
         choices.append((comp.id, comp))  
     return choices
+
+
+def choose_component(request, order_id, comp, socket=''):
+    """The user chooses a component"""
+    # Get the order object and the available components (compatible ones)
+    components = {
+        'cpu': (
+            CPU,
+            'CPU',
+            ),
+        'motherboard': (Motherboard, 'Motherboard'),
+        'gpu': (GPU, 'GPU'),
+        'ram': (RAM, 'RAM'),
+        'ref_system': (RefSystem, 'Refrigeration System'),
+        'case': (Case, 'Case'),
+        'power_supply': (PowerSupply, 'Power Supply')
+        }
+
+    label = f'Select the {components[comp][1]}:'
+
+    if socket == '':
+        components = components[comp][0].objects.all()
+    else:
+        components = components[comp][0].objects.filter(socket=socket)
+    
+    choices = get_choices(components)
+
+    order = Order.objects.get(id=order_id)
+
+    if request.method != 'POST':
+        form = ComponentForm(choices, label)
+    else:
+        form = ComponentForm(choices, label, request.POST)
+        if form.is_valid():
+            order.cpu = form.cleaned_data[comp]
+            order.save()
+            next_comp = components.keys()[components.keys().index(comp) + 1]
+            return HttpResponseRedirect(reverse(f'builder:{comp}',
+                args=(order_id,)))
+    url = "{% url 'builder:" + comp + "' " + order_id + comp + socket + " %}"
+    context = {'form': form, 'order_id': order_id}
+    return render(request, 'builder/cpu.html', context)

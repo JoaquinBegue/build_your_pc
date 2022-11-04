@@ -1,5 +1,10 @@
-<form action="{% url 'builder:ram' order_id %}" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button name="submit">NEXT</button>
-</form>
+{% extends 'builder/base.html' %}
+
+{% block content %}
+  <form action="{% url 'builder:ram' order_id %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>
+    <button name="submit">NEXT</button>
+  </form>
+{% endblock content %}
