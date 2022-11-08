@@ -4,9 +4,14 @@
   <h1>Here is your order at the moment:</h1>
 
   {% for comp_type, comp in components.items %}
-    {% if comp %}
+    {% if comp and comp_type != 'RAM' %}
       <li>{{ comp_type }}:</li>
       <ul><p>{{ comp }}</p></ul>
+      <br>
+    {% endif %}
+    {% if comp and comp_type == 'RAM' %}
+      <li>{{ comp_type }}:</li>
+      <ul><p>{{ comp.0 }} x {{ comp.1 }}</p></ul>
       <br>
     {% endif %}
   {% endfor %}

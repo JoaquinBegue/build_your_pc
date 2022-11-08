@@ -1,10 +1,10 @@
 {% extends 'builder/base.html' %}
 
 {% block content %}
-  <form action="{% url 'builder:ram' order_id %}" method="post">
+  <form action="{% url 'builder:choose_component' order_id comp %}" method="post">
     {% csrf_token %}
     {{ form }}
-    <br><button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>
+    <button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>
     <button name="submit">NEXT</button>
   </form>
 {% endblock content %}
