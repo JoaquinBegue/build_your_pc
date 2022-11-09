@@ -20,8 +20,9 @@ def index(request):
             order = Order()
             order.cpu_brand = form.cleaned_data['comp']
             order.save()
+            print('valid_form')
             return HttpResponseRedirect(reverse('builder:choose_component',
-                args=(order.id, 'index')))
+                args=(order.id, 'cpu')))
 
     context = {'form': form}
     return render(request, 'builder/index.html', context)
