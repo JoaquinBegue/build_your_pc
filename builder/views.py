@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -13,16 +13,21 @@ def index(request):
     label = "To start, select a socket-brand for your CPU and Motherboard:"
 
     if request.method != 'POST':
-        form = ComponentForm(choices, label, False)    
+        form = ComponentForm(choices, label, False)
+
     else:
         form = ComponentForm(choices, label, False, request.POST)
+        print('post')
         if form.is_valid():
+            print('valid')
             order = Order()
             order.cpu_brand = form.cleaned_data['comp']
             order.save()
-            print('valid_form')
-            return HttpResponseRedirect(reverse('builder:choose_component',
+            return HttpResponseRedirect(reverse('builder:choose_cpu',
                 args=(order.id, 'cpu')))
+        else:
+            return HttpResponse()
+        
 
     context = {'form': form}
     return render(request, 'builder/index.html', context)
@@ -101,7 +106,7 @@ def choose_component(request, order_id, comp):
                 comp_items[comp][2] = form.cleaned_data[comp]
 
             order.save()
-            return HttpResponseRedirect(reverse('builder:choose_component',
+            return HttpResponseRedirect(reverse(f'builder:choose_{comp}',
                 args=(order_id, next)))
     context = {'form': form, 'order_id': order_id, 'comp': comp,
         'previous':previous}

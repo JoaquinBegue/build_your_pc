@@ -12,7 +12,7 @@ urlpatterns = [
         name='choose_cpu'),
     # Motherboard choosing page.
     path('choose_component/<order_id>/<comp>', views.choose_component,
-        name='choose_mother'),
+        name='choose_motherboard'),
     # GPU choosing page.
     path('choose_component/<order_id>/<comp>', views.choose_component,
         name='choose_gpu'),
@@ -21,7 +21,7 @@ urlpatterns = [
         name='choose_ram'),
     # Ref. System choosing page.
     path('choose_component/<order_id>/<comp>', views.choose_component,
-        name='choose_ref_sys'),
+        name='choose_ref_system'),
     # Case choosing page.
     path('choose_component/<order_id>/<comp>', views.choose_component,
         name='choose_case'),
