@@ -1,10 +1,23 @@
 {% extends 'builder/base.html' %}
 
+{% load bootstrap5 %}
+
 {% block content %}
   <form action="{% url 'builder:choose_component' order_id comp %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>
-    <button name="submit">NEXT</button>
+    {% bootstrap_form form %}
+      
+    {% buttons %}
+      <button>
+        {% if previous == 'index' %}
+          <a href="{% url 'builder:index' %}" style="color: #ffffff;
+              text-decoration: none">BACK</a>
+        {% else %}
+          <a href="{% url 'builder:choose_component' order_id previous %}"
+              style="color: #ffffff; text-decoration: none">BACK</a>
+        {% endif %}
+      </button>
+      <button name="submit">NEXT</button>
+    {% endbuttons %}
   </form>
 {% endblock content %}

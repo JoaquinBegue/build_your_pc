@@ -1,8 +1,12 @@
 {% extends 'builder/base.html' %}
 
-{% block content %}
-  <h1>Here is your order at the moment:</h1>
+{% load bootstrap5 %}
 
+{% block header %}
+  <h1>Here is your order at the moment:</h1>
+{% endblock header %}
+
+{% block content %}
   {% for comp_type, comp in components.items %}
     {% if comp and comp_type != 'RAM' %}
       <li>{{ comp_type }}:</li>
@@ -16,5 +20,10 @@
     {% endif %}
   {% endfor %}
 
-  <button><a href="{{request.META.HTTP_REFERER|escape}}">BACK</a></button>
+  {% buttons %}
+    <button>
+      <a href="{% url 'builder:choose_component' order.id previous %}" 
+          style="color: #ffffff; text-decoration: none">BACK</a>
+    </button>
+  {% endbuttons %}
 {% endblock content %}

@@ -1,7 +1,18 @@
-<h1>Welcome to Build Your PC!</h1>
+{% extends 'builder/base.html' %}
 
-<form action="{% url 'builder:index' %}" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button name="submit">NEXT</button>
-</form>
+{% load bootstrap5 %}
+
+{% block header %}
+  <h1>Welcome to Build Your PC!</h1>
+{% endblock header %}
+
+{% block content %}
+  <form action="{% url 'builder:index' %}" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    
+    {% buttons %}
+      <button name="submit">NEXT</button>
+    {% endbuttons %}
+  </form>
+{% endblock content %}
